@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 
-
-import scrapy
+import sys
+from scrapy import Spider
 from dbmeizi.items import MeiziItem
 from scrapy.selector import Selector
 
+class dbmeiziSpider(Spider):
 
-class dbmeiziSpider(scrapy.Spider):
     name = "dbmeiziSpider"
     allowed_domains = ["douban.com"]
     start_urls = [
@@ -19,8 +19,11 @@ class dbmeiziSpider(scrapy.Spider):
         for li in liResults:
             for a in li.xpath('.//a'):
                 item = MeiziItem()
-                item['title'] = a.xpath('div[@class="album-title"]/text()').extract()
-                item['dataid'] = '1234'
+
+                title = (a.xpath('div[@class="album-title"]/text()').extract())[0]
+                item['title'] = title.strip()
+                dataid = (a.xpath('@href').extract())[0]
+                item['dataid'] = dataid.split('/')[2]
                 item['datasrc'] = a.xpath('img/@src').extract()
                 item['starcount'] = 0
 
