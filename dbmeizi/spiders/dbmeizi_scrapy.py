@@ -24,7 +24,7 @@ class dbmeiziSpider(Spider):
                 item['title'] = title.strip()
                 dataid = (a.xpath('@href').extract())[0]
                 item['dataid'] = dataid.split('/')[2]
-                item['datasrc'] = a.xpath('img/@src').extract()
+                item['datasrc'] = (a.xpath('img/@src').extract())[0]
                 item['starcount'] = 0
 
                 yield item
